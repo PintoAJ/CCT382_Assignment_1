@@ -5,7 +5,7 @@ public class ZombieStats : CharacterStats
 
     [SerializeField] private int damage;
     public float attackSpeed;
-    [SerializeField] private bool canAttack;
+    public float viewRadius;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -24,12 +24,6 @@ public class ZombieStats : CharacterStats
         InitVariables();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public override void InitVariables()
     {
         maxHealth = 25;
@@ -38,6 +32,6 @@ public class ZombieStats : CharacterStats
 
         damage = 10;
         attackSpeed = 1.5f;
-        canAttack = true;
+        viewRadius = 15;
     }
 }
