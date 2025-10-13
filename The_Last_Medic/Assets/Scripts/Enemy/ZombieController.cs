@@ -29,23 +29,52 @@ public class ZombieController : MonoBehaviour
 
     private void Update()
     {
+        bool openCombat = false;
         bool targetSpotted = false;
+        float min_dist = Mathf.Infinity;
 
         // determine if any Ally is valid target
         Collider[] alliesInRange = Physics.OverlapSphere(transform.position, stats.viewRadius, allyMask);
 
         // chase ally if possible
-        for (int i = 0; i < alliesInRange.Length; i++)
+        foreach (Collider c in alliesInRange)
         {
-            Transform ally = alliesInRange[i].transform;
-            // check if ally is in combat mode
-            // GetComponent() for AllyStats, check InCombat()
-            // set targetSpotted to true
-            MoveToTarget();
+            Transform ally = c.transform;
+            Vector3 direction = (c.transform.position - transform.position).normalized;
+            AllyStats allyStats = c.transform.GetComponent<AllyStats>();
+
+            // Ally in open combat, easier to spot
+            if (allyStats.state == AllyStats.AllyState.COMBAT)
+            {
+                if (Vector3.Distance(c.transform.position, transform.position) < min_dist)
+                {
+                    target = c.transform;
+                    targetSpotted = true;
+                    openCombat = true;
+                    min_dist = Vector3.Distance(c.transform.position, transform.position);
+                }
+            }
+
+            // Idle patrolling, harder to spot Ally
+            else if (allyStats.state == AllyStats.AllyState.HIDDEN)
+            {
+                if (Vector3.Angle(transform.forward, direction) < stats.viewAngle &&
+                    Vector3.Distance(c.transform.position, transform.position) < min_dist &&
+                    !openCombat)
+                {
+                    target = c.transform;
+                    targetSpotted = true;
+                    min_dist = Vector3.Distance(c.transform.position, transform.position);
+                }
+            }
+        
         }
 
-        // otherwise patrol
-        if (!targetSpotted)
+        if (targetSpotted)
+        {
+            MoveToTarget();
+        }
+        else
         {
             Patrol();
         }

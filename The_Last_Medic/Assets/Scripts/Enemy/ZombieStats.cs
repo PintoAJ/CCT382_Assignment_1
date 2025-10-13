@@ -6,6 +6,7 @@ public class ZombieStats : CharacterStats
     [SerializeField] private int damage;
     public float attackSpeed;
     public float viewRadius;
+    public float viewAngle;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -16,6 +17,9 @@ public class ZombieStats : CharacterStats
     {
         base.Die();
         Destroy(gameObject);
+
+        // consider rotating model to lie flat for 2 seconds before being destroyed
+        // alternatively, find death animation
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,12 +30,13 @@ public class ZombieStats : CharacterStats
 
     public override void InitVariables()
     {
-        maxHealth = 25;
+        maxHealth = 10;
         SetHealthTo(maxHealth);
         isDead = false;
 
         damage = 10;
         attackSpeed = 1.5f;
         viewRadius = 15;
+        viewAngle = 45;
     }
 }
