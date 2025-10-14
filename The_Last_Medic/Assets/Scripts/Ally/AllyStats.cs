@@ -14,6 +14,11 @@ public class AllyStats : CharacterStats
         statsToDamage.TakeDamage(damage);
     }
 
+    public int AttackStrength()
+    {
+        return damage;
+    }
+
     public override void Die()
     {
         base.Die();

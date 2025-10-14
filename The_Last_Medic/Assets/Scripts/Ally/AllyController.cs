@@ -51,7 +51,16 @@ public class AllyController : MonoBehaviour
             {
                 timeOfLastAttack = Time.time;
                 CharacterStats targetStats = target.GetComponent<CharacterStats>();
+                bool killConfirmed = targetStats.HealthLeft() <= stats.AttackStrength();
                 AttackTarget(targetStats);
+                
+                /* If this doesn't work, replace with try-catch statement */
+                /* Alternatively, change Zombie's Die() method so DestroyGameObject() is subsituted with Deactivate (make intangible)*/
+                if (killConfirmed)
+                {
+                    target = null;
+                }
+
             }
         }
     }
