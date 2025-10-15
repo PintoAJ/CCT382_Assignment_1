@@ -26,6 +26,11 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    public int HealthLeft()
+    {
+        return health;
+    }
+
     public virtual void Die()
     {
         isDead = true;
