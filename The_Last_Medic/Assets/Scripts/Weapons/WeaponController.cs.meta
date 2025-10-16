@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 29663a5b11d29dc49a14d0c9f2200eff
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - MuzzleTransform: {instanceID: 0}
+  - ProjectilePrefab: {fileID: 3659995153115176983, guid: 6606f5db24bcba74e9d512b42d9b7abf, type: 3}
+  - MuzzleFlash: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
