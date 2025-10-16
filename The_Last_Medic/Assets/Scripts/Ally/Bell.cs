@@ -5,7 +5,7 @@ public class Bell : MonoBehaviour, IBulletHittable
     [Header("Bell Logic")]
     public float radius = 6f;
     public LayerMask enemyMask = ~0;
-    public float cooldown = 2.0f;
+    public float cooldown = 15.0f;
 
     float _lastUse = -999f;
     bool _firstUse = true;
