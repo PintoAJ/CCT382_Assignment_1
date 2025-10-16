@@ -5,6 +5,7 @@ public class CharacterStats : MonoBehaviour
 
     [SerializeField] protected int health;
     [SerializeField] protected int maxHealth;
+    public int MaxHealth => maxHealth;
     [SerializeField] protected bool isDead;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

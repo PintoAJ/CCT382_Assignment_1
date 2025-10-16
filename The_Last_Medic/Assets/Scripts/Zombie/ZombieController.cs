@@ -144,6 +144,14 @@ public class ZombieController : MonoBehaviour
         }
     }
 
+    // in ZombieController.cs
+    public void TakeDamage(float amount)
+    {
+        if (stats != null)
+            stats.TakeDamage(Mathf.RoundToInt(amount)); // flows through ZombieStats/CharacterStats
+    }
+
+
     private void Patrol()
     {
         //Debug.Log("waypoint index at start:" + waypointIndex);
