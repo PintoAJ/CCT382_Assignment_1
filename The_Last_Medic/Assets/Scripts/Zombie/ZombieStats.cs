@@ -16,10 +16,6 @@ public class ZombieStats : CharacterStats
     public override void Die()
     {
         base.Die();
-        Destroy(gameObject);
-
-        // consider rotating model to lie flat for 2 seconds before being destroyed
-        // alternatively, find death animation
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

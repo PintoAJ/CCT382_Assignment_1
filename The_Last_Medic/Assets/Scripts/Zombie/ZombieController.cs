@@ -11,7 +11,8 @@ public class ZombieController : MonoBehaviour
     private bool isDistracted = false;
     public Transform distraction;
     public float curAttentionSpan;
-    public float MaxAttentionSpan = 10;
+    public float maxAttentionSpan = 10;
+    public float timeToDie = 10f;
 
     private NavMeshAgent agent = null;
     private Animator anim = null; 
@@ -27,14 +28,30 @@ public class ZombieController : MonoBehaviour
     {
         GetReferences();
         waitTime = UnityEngine.Random.Range(1, 4);
-        curAttentionSpan = MaxAttentionSpan;
+        curAttentionSpan = maxAttentionSpan;
         //Debug.Log("waypoint index at start:" + waypointIndex);
         agent.SetDestination(waypoints[waypointIndex].position);
     }
 
     protected virtual void Update()
     {
-        if (!isDistracted)
+        if (stats.IsDead())
+        {
+            if (timeToDie > 0)
+            {
+                agent.isStopped = true;
+                timeToDie -= Time.deltaTime;
+                
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(-90, 0, 0)), 90);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), 1);
+            }
+            else
+            {
+                // maybe just turn off instead?
+                Destroy(gameObject);
+            }
+        }
+        else if (!isDistracted)
         {
             bool targetSpotted = false;
             float min_dist = Mathf.Infinity;
@@ -85,18 +102,18 @@ public class ZombieController : MonoBehaviour
         }
         else
         {
-
             RotateToTarget();
 
             if (curAttentionSpan > 0)
             {
-                agent.SetDestination(transform.position);
-                curAttentionSpan -= Time.time;
+                agent.isStopped = true;
+                curAttentionSpan -= Time.deltaTime;
             }
             else
             {
                 isDistracted = false;
-                curAttentionSpan = MaxAttentionSpan;
+                agent.isStopped = false;
+                curAttentionSpan = maxAttentionSpan;
             }
         }
     }

@@ -64,8 +64,8 @@ public class AllyStats : CharacterStats
     public override void InitVariables()
     {
         maxHealth = 30;
-        SetHealthTo(maxHealth);
-        isDead = false;
+        SetHealthTo(0);
+        isDead = true;
 
         damage = 10;
         attackSpeed = 1.5f;
