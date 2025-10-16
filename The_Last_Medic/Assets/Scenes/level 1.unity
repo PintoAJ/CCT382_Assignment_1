@@ -871,7 +871,7 @@ GameObject:
   m_Component:
   - component: {fileID: 111767726}
   - component: {fileID: 111767727}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1110,7 +1110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 154692514}
   - component: {fileID: 154692515}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1390,7 +1390,7 @@ GameObject:
   - component: {fileID: 200374548}
   - component: {fileID: 200374547}
   - component: {fileID: 200374546}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2565,7 +2565,7 @@ GameObject:
   - component: {fileID: 312217607}
   - component: {fileID: 312217606}
   - component: {fileID: 312217605}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2745,7 +2745,7 @@ GameObject:
   m_Component:
   - component: {fileID: 337772813}
   - component: {fileID: 337772814}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3844,7 +3844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 434820315}
   - component: {fileID: 434820314}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4090,7 +4090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 458426334}
   - component: {fileID: 458426333}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5241,12 +5241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuPauseRuntime
   MenuCamera: {fileID: 247947649}
-  PlayerCamera: {fileID: 463814251}
-  PlayerRoot: {fileID: 1975041459}
-  DisableWhileMenu:
-  - {fileID: 1975041462}
-  DisableOnPause:
-  - {fileID: 1975041462}
+  PlayerCamera: {fileID: 2103744519}
+  PlayerRoot: {fileID: 892135801}
+  Plr: {fileID: 892135801}
   ButtonsFadeTime: 0.25
   BgFadeTime: 0.25
   CameraTweenTime: 0.45
@@ -5278,7 +5275,6 @@ MonoBehaviour:
   HipMax: 5
   ADSMin: 0.1
   ADSMax: 1.5
-  AutoDiscoverPlayer: 1
 --- !u!4 &630205022
 Transform:
   m_ObjectHideFlags: 0
@@ -6507,7 +6503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 790611191}
   - component: {fileID: 790611192}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7585,6 +7581,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4d6eed92fb93e948b95c2fc4d1f6f8d, type: 3}
+--- !u!1 &892135801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1786713799283578105, guid: b7d76512ead5144908ea70787db879d0, type: 3}
+  m_PrefabInstance: {fileID: 977466350}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &894850450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9631,7 +9632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1170197095}
   - component: {fileID: 1170197094}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13262,7 +13263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1609884811}
   - component: {fileID: 1609884812}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13789,7 +13790,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1730474955}
   - component: {fileID: 1730474954}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17180,6 +17181,11 @@ PrefabInstance:
       addedObject: {fileID: 434820315}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a64db63f2fbda684c82f3ec854f20cd5, type: 3}
+--- !u!20 &2103744519 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 671472322749987766, guid: b7d76512ead5144908ea70787db879d0, type: 3}
+  m_PrefabInstance: {fileID: 977466350}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2109317172
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17487,3 +17493,5 @@ SceneRoots:
   - {fileID: 725087072}
   - {fileID: 87831889}
   - {fileID: 968372810}
+  - {fileID: 247947650}
+  - {fileID: 630205022}
