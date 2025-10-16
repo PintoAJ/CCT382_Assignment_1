@@ -36,7 +36,6 @@ public class ZombieController : MonoBehaviour
     {
         if (!isDistracted)
         {
-            bool openCombat = false;
             bool targetSpotted = false;
             float min_dist = Mathf.Infinity;
 
@@ -57,7 +56,6 @@ public class ZombieController : MonoBehaviour
                     {
                         target = c.transform;
                         targetSpotted = true;
-                        openCombat = true;
                         min_dist = Vector3.Distance(c.transform.position, transform.position);
                     }
                 }
@@ -66,8 +64,7 @@ public class ZombieController : MonoBehaviour
                 else if (allyStats.state == AllyStats.AllyState.HIDDEN)
                 {
                     if (Vector3.Angle(transform.forward, direction) < stats.viewAngle &&
-                        Vector3.Distance(c.transform.position, transform.position) < min_dist &&
-                        !openCombat)
+                        Vector3.Distance(c.transform.position, transform.position) < min_dist)
                     {
                         target = c.transform;
                         targetSpotted = true;
@@ -160,6 +157,7 @@ public class ZombieController : MonoBehaviour
     {
         //Debug.Log("waypoint index at start:" + waypointIndex);
         agent.SetDestination(waypoints[waypointIndex].position);
+        anim.SetFloat("Speed", 1f, 0.3f, Time.deltaTime);
 
         float distanceToWaypoint = Vector3.Distance(transform.position, waypoints[waypointIndex].position);
         if (distanceToWaypoint <= agent.stoppingDistance)

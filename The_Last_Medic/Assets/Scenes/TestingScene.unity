@@ -885,6 +885,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
+    - target: {fileID: 4260930859942115348, guid: 0d5dc9597f4ec409da2c453da09e3e2b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7074070844746380906, guid: 0d5dc9597f4ec409da2c453da09e3e2b, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
@@ -1001,6 +1005,10 @@ PrefabInstance:
     - target: {fileID: 7185009973539676135, guid: ea463e85a9d664594a75042a2b76ffa5, type: 3}
       propertyPath: m_Name
       value: MageZombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 7185009973539676135, guid: ea463e85a9d664594a75042a2b76ffa5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
