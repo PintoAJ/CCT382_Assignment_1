@@ -10,7 +10,8 @@ public class ZombieController : MonoBehaviour
     private bool hasStopped = false;
     private bool isDistracted = false;
     public Transform distraction;
-    public float attentionSpan = 10;
+    public float curAttentionSpan;
+    public float MaxAttentionSpan = 10;
 
     private NavMeshAgent agent = null;
     private Animator anim = null; 
@@ -26,6 +27,7 @@ public class ZombieController : MonoBehaviour
     {
         GetReferences();
         waitTime = UnityEngine.Random.Range(1, 4);
+        curAttentionSpan = MaxAttentionSpan;
         //Debug.Log("waypoint index at start:" + waypointIndex);
         agent.SetDestination(waypoints[waypointIndex].position);
     }
@@ -86,16 +88,18 @@ public class ZombieController : MonoBehaviour
         }
         else
         {
+
             RotateToTarget();
 
-            if (attentionSpan > 0)
+            if (curAttentionSpan > 0)
             {
-                attentionSpan -= Time.time;
+                agent.SetDestination(transform.position);
+                curAttentionSpan -= Time.time;
             }
             else
             {
                 isDistracted = false;
-                attentionSpan = 10;
+                curAttentionSpan = MaxAttentionSpan;
             }
         }
     }
@@ -179,11 +183,15 @@ public class ZombieController : MonoBehaviour
 
     private void RotateToTarget()
     {
-        Vector3 direction = target.position - transform.position;
+        Vector3 direction;
         
         if (isDistracted)
         {
             direction = distraction.position - transform.position;
+        }
+        else
+        {
+            direction = target.position - transform.position;
         }
         
         Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
