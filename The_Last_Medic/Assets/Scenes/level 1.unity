@@ -5241,9 +5241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuPauseRuntime
   MenuCamera: {fileID: 247947649}
-  PlayerCamera: {fileID: 671472322854914136}
-  PlayerRoot: {fileID: 1786713798918596375}
-  Plr: {fileID: 1786713798918596375}
+  PlayerCamera: {fileID: 2103744519}
+  PlayerRoot: {fileID: 892135801}
+  Plr: {fileID: 892135801}
   ButtonsFadeTime: 0.25
   BgFadeTime: 0.25
   CameraTweenTime: 0.45
@@ -7581,6 +7581,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4d6eed92fb93e948b95c2fc4d1f6f8d, type: 3}
+--- !u!1 &892135801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1786713799283578105, guid: b7d76512ead5144908ea70787db879d0, type: 3}
+  m_PrefabInstance: {fileID: 977466350}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &894850450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14424,11 +14429,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6bc5a23d8cb251f40b96a1fbf4ddb4fc, type: 3}
---- !u!23 &1833909650 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: a64db63f2fbda684c82f3ec854f20cd5, type: 3}
-  m_PrefabInstance: {fileID: 2084415477}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1834518215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17181,6 +17181,11 @@ PrefabInstance:
       addedObject: {fileID: 434820315}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a64db63f2fbda684c82f3ec854f20cd5, type: 3}
+--- !u!20 &2103744519 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 671472322749987766, guid: b7d76512ead5144908ea70787db879d0, type: 3}
+  m_PrefabInstance: {fileID: 977466350}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2109317172
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17488,3 +17493,5 @@ SceneRoots:
   - {fileID: 725087072}
   - {fileID: 87831889}
   - {fileID: 968372810}
+  - {fileID: 247947650}
+  - {fileID: 630205022}
