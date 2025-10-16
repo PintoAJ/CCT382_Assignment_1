@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,11 +12,10 @@ using UnityEngine.InputSystem;
 public class MenuPauseRuntime : MonoBehaviour
 {
     [Header("Optional: assign if you have them in-scene")]
-    public Camera MenuCamera;     // Enabled at start; nice menu shot
-    public Camera PlayerCamera;   // Disabled at start; on your player rig
-    public GameObject PlayerRoot; // Player rig (to enable/disable scripts)
-    public Behaviour[] DisableWhileMenu; // movement/look scripts to freeze pre-Play
-    public Behaviour[] DisableOnPause;   // movement/look scripts to freeze on pause
+    public Camera MenuCamera;       // Enabled at start; nice menu shot
+    public Camera PlayerCamera;     // Disabled at start; on your player rig
+    public GameObject PlayerRoot;   // Optional; will be auto-filled if null
+    public GameObject Plr;          // Optional shortcut; if set, we use this as PlayerRoot
 
     [Header("Timings")]
     public float ButtonsFadeTime = 0.25f;
@@ -29,16 +28,6 @@ public class MenuPauseRuntime : MonoBehaviour
     public float HipMax = 5f;
     public float ADSMin = 0.1f;
     public float ADSMax = 1.5f;
-
-    // Auto-discovery of player & controller scripts
-    [Header("Auto Discover Player")]
-    public bool AutoDiscoverPlayer = true;
-    static readonly string[] k_AutoDisableNameContains = new[]
-    {
-        "PlayerInput","FirstPersonController","StarterAssetsInputs",
-        "CharacterController","Input","Controller","Look","Mouse","Move"
-    };
-    readonly System.Collections.Generic.List<Behaviour> _autoDisabled = new();
 
     const string PP_HIP = "sens_hip";
     const string PP_ADS = "sens_ads_scale";
@@ -82,7 +71,6 @@ public class MenuPauseRuntime : MonoBehaviour
         // Initialize UI state
         SetGroup(_mainButtonsGroup, 1f, true);
         SetGroup(_blackBG, 0.6f, false); // don't block clicks
-        // also ensure the Image itself doesn't eat clicks
         var bgImg = _blackBG ? _blackBG.GetComponent<Image>() : null;
         if (bgImg) bgImg.raycastTarget = false;
 
@@ -96,11 +84,12 @@ public class MenuPauseRuntime : MonoBehaviour
         ApplyHip(hip, updateSlider: false);
         ApplyADS(ads, updateSlider: false);
 
-        // Auto-discover player & controller scripts
-        AutoDiscover();
+        // Find the player root once, cleanly
+        ResolvePlayerRoot();
 
-        // Freeze gameplay until Play
-        SetGameplayEnabled(false);
+        // Freeze gameplay until Play (disable all scripts on player hierarchy)
+        SetPlayerChildrenEnabled(PlayerRoot, false);
+        SetCursorForUI(true);
     }
 
     void Update()
@@ -112,6 +101,38 @@ public class MenuPauseRuntime : MonoBehaviour
         escPressed = Input.GetKeyDown(KeyCode.Escape);
 #endif
         if (escPressed && _playing) TogglePause();
+    }
+
+    // ---------- Player resolve & enable/disable ----------
+
+    void ResolvePlayerRoot()
+    {
+        // Priority: Plr field → PlayerRoot field → Player tag → PlayerCamera root → MenuCamera root
+        if (Plr) { PlayerRoot = Plr; return; }
+        if (PlayerRoot) return;
+
+        var tagged = GameObject.FindGameObjectWithTag("Player");
+        if (tagged) { PlayerRoot = tagged; return; }
+
+        if (PlayerCamera) { PlayerRoot = PlayerCamera.transform.root.gameObject; return; }
+        if (MenuCamera) { PlayerRoot = MenuCamera.transform.root.gameObject; }
+    }
+
+    void SetPlayerChildrenEnabled(GameObject root, bool enabled)
+    {
+        if (!root) return;
+
+        var behaviours = root.GetComponentsInChildren<Behaviour>(true);
+        foreach (var b in behaviours)
+        {
+            if (!b) continue;
+
+            // keep visuals/audio/animators on so menus/cameras still work
+            if (b is Camera || b is AudioListener || b is Animator)
+                continue;
+
+            b.enabled = enabled;
+        }
     }
 
     // ---------- Bootstrapping ----------
@@ -231,44 +252,6 @@ public class MenuPauseRuntime : MonoBehaviour
         UpdateSensLabels();
     }
 
-    // ---------- Auto Discover ----------
-
-    void AutoDiscover()
-    {
-        if (!AutoDiscoverPlayer) return;
-
-        if (!PlayerRoot)
-        {
-            var tagged = GameObject.FindGameObjectWithTag("Player");
-            if (tagged) PlayerRoot = tagged;
-            else if (PlayerCamera) PlayerRoot = PlayerCamera.transform.root.gameObject;
-            else if (MenuCamera) PlayerRoot = MenuCamera.transform.root.gameObject;
-        }
-
-        if (PlayerRoot && (DisableWhileMenu == null || DisableWhileMenu.Length == 0))
-            BuildAutoDisableList(PlayerRoot, _autoDisabled);
-    }
-
-    static void BuildAutoDisableList(GameObject root, System.Collections.Generic.List<Behaviour> outList)
-    {
-        outList.Clear();
-        var behaviours = root.GetComponentsInChildren<Behaviour>(true);
-        foreach (var b in behaviours)
-        {
-            if (b == null) continue;
-            if (b is Camera || b is AudioListener || b is Animator) continue;
-
-            string n = b.GetType().Name;
-            bool match = false;
-            for (int i = 0; i < k_AutoDisableNameContains.Length; i++)
-            {
-                if (n.IndexOf(k_AutoDisableNameContains[i], System.StringComparison.OrdinalIgnoreCase) >= 0)
-                { match = true; break; }
-            }
-            if (match) outList.Add(b);
-        }
-    }
-
     // ---------- Button handlers ----------
 
     public void OnClick_Play()
@@ -302,7 +285,7 @@ public class MenuPauseRuntime : MonoBehaviour
         {
             PlayerCamera.enabled = false;
             if (_playerAL) _playerAL.enabled = false;
-
+            SetCursorForUI(false);
             yield return TweenCamera(MenuCamera.transform, PlayerCamera.transform, CameraTweenTime, TweenCurve);
 
             MenuCamera.enabled = false;
@@ -310,9 +293,11 @@ public class MenuPauseRuntime : MonoBehaviour
 
             PlayerCamera.enabled = true;
             if (_playerAL) _playerAL.enabled = true;
+
         }
 
-        SetGameplayEnabled(true);
+        // Enable all scripts under the player
+        SetPlayerChildrenEnabled(PlayerRoot, true);
 
         _rulesPanel.SetActive(false);
         _backStoryPanel.SetActive(false);
@@ -333,9 +318,11 @@ public class MenuPauseRuntime : MonoBehaviour
         _paused = true;
         Time.timeScale = 0f;
         SetPauseVisible(true);
+        SetCursorForUI(true);
 
-        if (DisableOnPause != null) foreach (var b in DisableOnPause) if (b) b.enabled = false;
-        foreach (var b in _autoDisabled) if (b) b.enabled = false; // auto list
+
+        // Disable all scripts under the player while paused
+        SetPlayerChildrenEnabled(PlayerRoot, false);
     }
 
     public void Resume()
@@ -345,8 +332,10 @@ public class MenuPauseRuntime : MonoBehaviour
         Time.timeScale = 1f;
         SetPauseVisible(false);
 
-        if (DisableOnPause != null) foreach (var b in DisableOnPause) if (b) b.enabled = true;
-        foreach (var b in _autoDisabled) if (b) b.enabled = true; // auto list
+        // Re-enable all scripts under the player
+        SetPlayerChildrenEnabled(PlayerRoot, true);
+        SetCursorForUI(false);
+
     }
 
     void SetPauseVisible(bool vis)
@@ -429,17 +418,7 @@ public class MenuPauseRuntime : MonoBehaviour
     void UpdateSensLabels()
     {
         if (_hipLabel && _hipSlider) _hipLabel.text = $"Hip Sensitivity: {_hipSlider.value:0.00}";
-        if (_adsLabel && _adsSlider) _adsLabel.text = $"ADS Scale: {_adsSlider.value:0.00}�";
-    }
-
-    // ---------- Gameplay enable/disable ----------
-
-    void SetGameplayEnabled(bool enabled)
-    {
-        if (DisableWhileMenu != null)
-            foreach (var b in DisableWhileMenu) if (b) b.enabled = enabled;
-
-        foreach (var b in _autoDisabled) if (b) b.enabled = enabled; // auto list
+        if (_adsLabel && _adsSlider) _adsLabel.text = $"ADS Scale: {_adsSlider.value:0.00}×";
     }
 
     // ---------- UI Builders ----------
@@ -652,6 +631,13 @@ public class MenuPauseRuntime : MonoBehaviour
         cg.interactable = interactable;
         cg.blocksRaycasts = interactable;
     }
+
+    void SetCursorForUI(bool uiMode)
+    {
+        Cursor.lockState = uiMode ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = uiMode;
+    }
+
 
     IEnumerator FadeCanvas(CanvasGroup cg, float from, float to, float time)
     {
