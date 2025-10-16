@@ -100,10 +100,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8986545764310910278}
   - component: {fileID: 4823598717432510465}
-  - component: {fileID: 5987813052310254127}
-  - component: {fileID: 5240331602935616754}
   - component: {fileID: 492840205319804529}
+  - component: {fileID: 5240331602935616754}
   - component: {fileID: 4218257960068734052}
+  - component: {fileID: 1489917798806978673}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -152,38 +152,6 @@ CharacterController:
   m_SkinWidth: 0.001
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &5987813052310254127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786713799283578105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb1f45b5a47ece244a62eb3fe8fe5d7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BasicRigidBodyPush
-  pushLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  canPush: 0
-  strength: 1.1
---- !u!114 &5240331602935616754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1786713799283578105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd792faa18968724cbd91b1a85186f34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unity.FPS.Gameplay.PlayerInputHandler
-  LookSensitivity: 1
-  InvertYAxis: 0
-  InvertXAxis: 0
 --- !u!114 &492840205319804529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +172,21 @@ MonoBehaviour:
   LookSensitivity: 1
   VerticalClamp: 89
   AimingRotationMultiplier: 0.6
+--- !u!114 &5240331602935616754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786713799283578105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd792faa18968724cbd91b1a85186f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unity.FPS.Gameplay.PlayerInputHandler
+  LookSensitivity: 1
+  InvertYAxis: 0
+  InvertXAxis: 0
 --- !u!114 &4218257960068734052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +205,23 @@ MonoBehaviour:
   FpsWeaponLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &1489917798806978673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786713799283578105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb1f45b5a47ece244a62eb3fe8fe5d7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicRigidBodyPush
+  pushLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  canPush: 0
+  strength: 1.1
 --- !u!1 &2576001570368411917
 GameObject:
   m_ObjectHideFlags: 0
