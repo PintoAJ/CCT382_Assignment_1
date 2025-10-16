@@ -31,7 +31,8 @@ public class HealthBarUpdate : MonoBehaviour
             Debug.Log(targetFillAmount);
         }
         else {
-            _healthBarFill.enabled = false;
+            // _healthBarFill.enabled = false;
+            _healthBarFill.fillAmount = 0;
         }
         
     }
