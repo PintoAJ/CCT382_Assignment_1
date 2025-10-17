@@ -76,6 +76,6 @@ public class AllyStats : CharacterStats
 
         damage = 10;
         attackSpeed = 1.5f;
-        viewRadius = 50;
+        viewRadius = 30;
     }
 }
