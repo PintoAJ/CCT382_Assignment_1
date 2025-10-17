@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7571157654404286287
+--- !u!1 &4517603902413198276
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1243285932574339910}
-  - component: {fileID: 1513575777761715702}
-  - component: {fileID: 1695828955845707143}
-  - component: {fileID: 5689835220756571649}
-  - component: {fileID: 7651951494585351403}
-  - component: {fileID: 5556018647803086217}
+  - component: {fileID: 4399209234445917982}
+  - component: {fileID: 3405771862977643177}
+  - component: {fileID: 3071264473044931622}
+  - component: {fileID: 2680844335699608445}
+  - component: {fileID: 7432978036594141442}
+  - component: {fileID: 101302336747944714}
   m_Layer: 6
-  m_Name: HeavyZombie
+  m_Name: Zombie new
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1243285932574339910
+--- !u!4 &4399209234445917982
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -30.376863, y: 38.506065, z: -51.154785}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -5.663, y: 1.917, z: 6.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6070974309960684271}
+  - {fileID: 8114360881597170879}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1513575777761715702
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!136 &3405771862977643177
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -60,13 +60,13 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &1695828955845707143
+--- !u!54 &3071264473044931622
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
@@ -87,13 +87,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!195 &5689835220756571649
+--- !u!195 &2680844335699608445
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -109,13 +109,13 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7651951494585351403
+--- !u!114 &7432978036594141442
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cac35352421ce4b2bbc415a26785c8f0, type: 3}
@@ -123,8 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombieController
   distraction: {fileID: 0}
   curAttentionSpan: 0
-  maxAttentionSpan: 10
-  timeToDie: 10
+  MaxAttentionSpan: 1000
   target: {fileID: 0}
   allyMask:
     serializedVersion: 2
@@ -132,20 +131,18 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!114 &5556018647803086217
+--- !u!114 &101302336747944714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7571157654404286287}
+  m_GameObject: {fileID: 4517603902413198276}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 174ef605e99e042a28165030b5e66cdb, type: 3}
+  m_Script: {fileID: 11500000, guid: bd72b7646501f4f28b5d13e56b1044b5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeavyZombieStats
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieStats
   health: 0
   maxHealth: 0
   isDead: 0
@@ -153,14 +150,13 @@ MonoBehaviour:
   attackSpeed: 0
   viewRadius: 0
   viewAngle: 0
-  levelManager: {fileID: 0}
---- !u!1001 &6037875218000114948
+--- !u!1001 &8581249857150362452
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1243285932574339910}
+    m_TransformParent: {fileID: 4399209234445917982}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
       propertyPath: m_LocalPosition.x
@@ -627,8 +623,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
---- !u!4 &6070974309960684271 stripped
+--- !u!4 &8114360881597170879 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
-  m_PrefabInstance: {fileID: 6037875218000114948}
+  m_PrefabInstance: {fileID: 8581249857150362452}
   m_PrefabAsset: {fileID: 0}

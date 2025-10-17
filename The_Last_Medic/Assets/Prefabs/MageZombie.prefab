@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &114648388469332095
+--- !u!1 &8885084111949775273
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7589123451084746731}
-  - component: {fileID: 6472416200772306331}
-  - component: {fileID: 7165152006019858744}
-  - component: {fileID: 4342147741993749203}
-  - component: {fileID: 387902823658454533}
-  - component: {fileID: 3758251317517984300}
+  - component: {fileID: 7083789781118597373}
+  - component: {fileID: 3863805608901891881}
+  - component: {fileID: 5256251663869109945}
+  - component: {fileID: 6399650746998345566}
+  - component: {fileID: 5942677129176406277}
+  - component: {fileID: 6516632431541617159}
   m_Layer: 6
   m_Name: MageZombie
   m_TagString: Untagged
@@ -21,29 +21,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7589123451084746731
+--- !u!4 &7083789781118597373
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9825071, z: -0, w: 0.18622509}
-  m_LocalPosition: {x: -7.3287764, y: 1.499999, z: 5.1080647}
+  m_LocalPosition: {x: -33.01575, y: 38.506065, z: -49.762657}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6187315022482520841}
+  - {fileID: 148067783984266581}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -158.535, z: 0}
---- !u!136 &6472416200772306331
+--- !u!136 &3863805608901891881
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -60,13 +60,13 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &7165152006019858744
+--- !u!54 &5256251663869109945
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
@@ -87,13 +87,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!195 &4342147741993749203
+--- !u!195 &6399650746998345566
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -109,13 +109,13 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &387902823658454533
+--- !u!114 &5942677129176406277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd72b7646501f4f28b5d13e56b1044b5, type: 3}
@@ -128,13 +128,14 @@ MonoBehaviour:
   attackSpeed: 0
   viewRadius: 0
   viewAngle: 0
---- !u!114 &3758251317517984300
+  levelManager: {fileID: 0}
+--- !u!114 &6516632431541617159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114648388469332095}
+  m_GameObject: {fileID: 8885084111949775273}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f40b34e4945a542f1b415edb79efa40e, type: 3}
@@ -142,7 +143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MageZombieController
   distraction: {fileID: 0}
   curAttentionSpan: 0
-  MaxAttentionSpan: 10
+  maxAttentionSpan: 10
+  timeToDie: 10
   target: {fileID: 0}
   allyMask:
     serializedVersion: 2
@@ -151,13 +153,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   mageOrb: {fileID: 2571523276953196625, guid: b7c45eddfde9b4822b27f275fef2aae6, type: 3}
---- !u!1001 &5933346576041729250
+--- !u!1001 &397640167121410750
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 7589123451084746731}
+    m_TransformParent: {fileID: 7083789781118597373}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
       propertyPath: m_LocalPosition.x
@@ -624,8 +626,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
---- !u!4 &6187315022482520841 stripped
+--- !u!4 &148067783984266581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 277919cf4b4d7442189b0bd3e6dc3b66, type: 3}
-  m_PrefabInstance: {fileID: 5933346576041729250}
+  m_PrefabInstance: {fileID: 397640167121410750}
   m_PrefabAsset: {fileID: 0}

@@ -27,6 +27,16 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(next);
     }
 
+    public void ZombieDown()
+    {
+        numZombies--;
+    }
+
+    public void AllyDown()
+    {
+        numAllies--;
+    }
+
     public void Update()
     {
         playerTime -= Time.deltaTime;
