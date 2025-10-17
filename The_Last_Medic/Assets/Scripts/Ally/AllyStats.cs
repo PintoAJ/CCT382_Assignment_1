@@ -8,6 +8,8 @@ public class AllyStats : CharacterStats
     public float attackSpeed;
     public float viewRadius;
     public AllyState state = AllyState.DEAD;
+    public GameObject levelManager;
+    public int lives = 3;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -24,17 +26,22 @@ public class AllyStats : CharacterStats
         base.Die();
         state = AllyState.DEAD;
 
-        // consider rotating model to lie flat on ground 
-        // alternatively, find death animation
+        if (lives == 0)
+        {
+            LevelManager lm = levelManager.GetComponent<LevelManager>();
+            lm.AllyDown();
+        }
     }
 
     public void Revive()
     {
-        state = AllyState.HIDDEN;
-        SetHealthTo(maxHealth);
-        isDead = false;
-
-        // undo dying animation/changes
+        if (lives > 0)
+        {
+            lives--;
+            state = AllyState.HIDDEN;
+            SetHealthTo(maxHealth);
+            isDead = false;
+        }
     }
 
     public void ReceiveOrder(string mode)

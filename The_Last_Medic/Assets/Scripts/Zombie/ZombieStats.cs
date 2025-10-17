@@ -7,6 +7,7 @@ public class ZombieStats : CharacterStats
     public float attackSpeed;
     public float viewRadius;
     public float viewAngle;
+    public GameObject levelManager;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -16,6 +17,8 @@ public class ZombieStats : CharacterStats
     public override void Die()
     {
         base.Die();
+        LevelManager lm = levelManager.GetComponent<LevelManager>();
+        lm.ZombieDown();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
