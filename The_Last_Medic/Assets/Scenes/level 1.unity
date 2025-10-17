@@ -8282,6 +8282,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4975727343116530045, guid: b7d76512ead5144908ea70787db879d0, type: 3}
+      propertyPath: AimSensitivityScale
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4975727343116530045, guid: b7d76512ead5144908ea70787db879d0, type: 3}
       propertyPath: FadeGroups.Array.size
       value: 2
       objectReference: {fileID: 0}
