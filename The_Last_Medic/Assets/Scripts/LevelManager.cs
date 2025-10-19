@@ -57,12 +57,12 @@ public class LevelManager : MonoBehaviour
         // init the starting count for all allies and zombies
         if (zombiesParent)
         {
-            numZombies = zombiesParent.transform.childCount; // direct children only
+            numZombies = zombiesParent.transform.childCount;
         }
 
         if (alliesParent)
         {
-            numAllies = alliesParent.transform.childCount; // direct children only
+            numAllies = alliesParent.transform.childCount;
         }
 
         // cache player scripts
@@ -182,6 +182,7 @@ public class LevelManager : MonoBehaviour
         UpdateUI();
 
         // toggle ally mode with E
+        // we use both input systems so this should work
         if (Input.GetKeyDown(KeyCode.E))
         {
             ToggleAllyMode();
@@ -221,28 +222,28 @@ public class LevelManager : MonoBehaviour
     void ToggleAllyMode()
     {
         isCombatMode = !isCombatMode;
+
+        // HIDDEN means stand down, COMBAT means attack
         string order = isCombatMode ? "Attack" : "StandDown";
 
-        // send new order to all allies
         if (alliesParent)
         {
             foreach (Transform ally in alliesParent.transform)
             {
-                if (ally == alliesParent.transform)
-                    continue;
+                if (ally == alliesParent.transform) continue;
 
-                var allyStats = ally.GetComponent("AllyStats");
-                if (allyStats != null)
-                {
-                    allyStats.SendMessage("ReceiveOrder", order, SendMessageOptions.DontRequireReceiver);
-                }
+                var stats = ally.GetComponent<AllyStats>();
+                if (!stats) continue;
 
-                // change color depending on mode
+                // skip dead allies
+                if (stats.state == AllyStats.AllyState.DEAD) continue;
+
+                // delegate state change to AllyStats (keeps your writing style)
+                stats.ReceiveOrder(order);
+
+                // optional visual cue
                 var rend = ally.GetComponentInChildren<Renderer>();
-                if (rend)
-                {
-                    rend.material.color = isCombatMode ? Color.red : Color.blue;
-                }
+                if (rend) rend.material.color = isCombatMode ? Color.red : Color.blue;
             }
         }
 

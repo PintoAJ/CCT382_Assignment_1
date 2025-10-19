@@ -13418,6 +13418,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: d7ad634caa1c049d49b730cc6d29c683, type: 3}
   m_PrefabInstance: {fileID: 916281114}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &924915727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 924915729}
+  - component: {fileID: 924915728}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &924915728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924915727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f8d2448cd39408698514bfdc386440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  numZombies: 0
+  numAllies: 0
+  playerScore: 0
+  playerTime: 0
+  zombiesParent: {fileID: 0}
+  alliesParent: {fileID: 0}
+  playerRoot: {fileID: 0}
+  alliesText: {fileID: 0}
+  zombiesText: {fileID: 0}
+  modeText: {fileID: 0}
+  scoreText: {fileID: 0}
+  endPanel: {fileID: 0}
+  endTitle: {fileID: 0}
+  retryButton: {fileID: 0}
+  nextButton: {fileID: 0}
+  menuButton: {fileID: 0}
+  pausePanel: {fileID: 0}
+  pauseResumeButton: {fileID: 0}
+  pauseRetryButton: {fileID: 0}
+  pauseSkipButton: {fileID: 0}
+  pauseMenuButton: {fileID: 0}
+--- !u!4 &924915729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924915727}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.98028, y: 38.50607, z: -52.3859}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &930195789 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 6bc5a23d8cb251f40b96a1fbf4ddb4fc, type: 3}
@@ -31175,3 +31240,4 @@ SceneRoots:
   - {fileID: 749873640}
   - {fileID: 162210768}
   - {fileID: 1171303315}
+  - {fileID: 924915729}
