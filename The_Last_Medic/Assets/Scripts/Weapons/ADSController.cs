@@ -12,6 +12,8 @@ namespace Unity.FPS.Gameplay
     /// - Smooth FOV and weapon pose (slides toward centered ADS pose).
     /// - Fades gun (auto-collected under Sniper_1) + anything in FadeTargets + all children in FadeGroups.
     /// - Scales look sensitivity while ADS (reflection) and optionally reduces WeaponSway.
+    /// - Separate hip vs ADS sensitivities (optional explicit override).
+    /// - Scroll-to-zoom while ADS (adjusts Aim FOV).
     /// - Uses the new Input System.
     /// </summary>
     public class ADSController : MonoBehaviour
@@ -26,8 +28,25 @@ namespace Unity.FPS.Gameplay
 
         [Header("FOV")]
         public float HipFOV = 70f;
+
+        [Tooltip("Default ADS FOV. Acts as initial zoom; can be changed in play via scroll.")]
         public float AimFOV = 28f;
+
+        [Tooltip("How fast we lerp the camera FOV toward the target.")]
         public float FovLerpSpeed = 10f;
+
+        [Header("ADS Zoom (scroll while aiming)")]
+        [Tooltip("Enable mouse wheel zoom while aiming.")]
+        public bool EnableScrollZoom = true;
+
+        [Tooltip("Smallest (most zoomed-in) FOV when ADS.")]
+        public float MinAimFOV = 20f;
+
+        [Tooltip("Largest (least zoomed) FOV when ADS.")]
+        public float MaxAimFOV = 45f;
+
+        [Tooltip("How much to change FOV per scroll notch (positive number).")]
+        public float ScrollZoomStep = 2.5f;
 
         [Header("Weapon Pose (no scope anchor; tweak to taste)")]
         [Tooltip("Local pose when NOT aiming.")]
@@ -55,10 +74,20 @@ namespace Unity.FPS.Gameplay
         public float FadeLerpSpeed = 12f;
 
         [Header("Sensitivity (auto detect & scale)")]
-        [Tooltip("Multiplier applied to look sensitivity while aiming (e.g., 0.5 halves sensitivity).")]
-        public float AimSensitivityScale = 0.5f;
-        [Tooltip("Try to find and scale a look sensitivity field/property on your look script (by reflection).")]
+        [Tooltip("If true, we will write to a detected sensitivity field/property while aiming.")]
         public bool AutoScaleLookSensitivity = true;
+
+        [Tooltip("Multiplier applied to look sensitivity while aiming (legacy fallback).")]
+        public float AimSensitivityScale = 0.5f;
+
+        [Tooltip("If true, use these explicit hip/ADS sensitivity values instead of the detected hip sensitivity.")]
+        public bool UseExplicitLookSensitivity = false;
+
+        [Tooltip("Hip-fire look sensitivity to write while not aiming (only used if UseExplicitLookSensitivity = true).")]
+        public float HipLookSensitivity = 1.0f;
+
+        [Tooltip("ADS look sensitivity to write while fully aimed (only used if UseExplicitLookSensitivity = true).")]
+        public float AdsLookSensitivity = 0.5f;
 
         [Header("Sway (optional)")]
         [Tooltip("If you use WeaponSway, we’ll try to scale it down while ADS.")]
@@ -74,6 +103,9 @@ namespace Unity.FPS.Gameplay
         Vector2 _prevMouse;
         bool _materialsInstanced;
 
+        // Current zoomable ADS FOV
+        float _currentAimFOV;
+
         readonly List<Renderer> _autoCollected = new List<Renderer>();
         readonly List<Material[]> _originalMats = new List<Material[]>();
         readonly List<Material[]> _runtimeMats = new List<Material[]>();
@@ -82,7 +114,7 @@ namespace Unity.FPS.Gameplay
         Component _lookComponent;
         FieldInfo _sensField;
         PropertyInfo _sensProperty;
-        float _hipSensitivityValue = float.NaN;
+        float _hipSensitivityValue = float.NaN; // detected hip sens (if not using explicit)
 
         // optional sway scaling
         Component _swayComponent;
@@ -103,6 +135,9 @@ namespace Unity.FPS.Gameplay
                 WeaponRoot.localRotation = Quaternion.Euler(HipLocalEuler);
             }
             if (PlayerCamera != null) PlayerCamera.fieldOfView = HipFOV;
+
+            // Initialize scroll-zoom state from AimFOV, clamped to bounds
+            _currentAimFOV = Mathf.Clamp(AimFOV, Mathf.Min(MinAimFOV, MaxAimFOV), Mathf.Max(MinAimFOV, MaxAimFOV));
 
             _prevMouse = Mouse.current != null ? Mouse.current.delta.ReadValue() : Vector2.zero;
         }
@@ -224,6 +259,20 @@ namespace Unity.FPS.Gameplay
             if (Mouse.current != null)
                 _isAiming = Mouse.current.rightButton.isPressed;
 
+            // Scroll-to-zoom while ADS
+            if (EnableScrollZoom && _isAiming && Mouse.current != null)
+            {
+                float scrollY = Mouse.current.scroll.ReadValue().y;
+                if (Mathf.Abs(scrollY) > 0.01f)
+                {
+                    // Typical mouse wheels produce +/-120 per notch; use sign for uniform steps.
+                    float step = Mathf.Sign(scrollY) * ScrollZoomStep;
+                    // Scrolling up (positive Y) usually means zoom in => smaller FOV.
+                    _currentAimFOV = Mathf.Clamp(_currentAimFOV - step,
+                        Mathf.Min(MinAimFOV, MaxAimFOV), Mathf.Max(MinAimFOV, MaxAimFOV));
+                }
+            }
+
             // Smooth aim factor
             float target = _isAiming ? 1f : 0f;
             _aimT = Mathf.MoveTowards(_aimT, target, Time.deltaTime * PoseLerpSpeed);
@@ -240,10 +289,10 @@ namespace Unity.FPS.Gameplay
                 WeaponRoot.localRotation = Quaternion.Slerp(WeaponRoot.localRotation, aimRot, Time.deltaTime * PoseLerpSpeed);
             }
 
-            // FOV
+            // FOV (use the current zoomable ADS FOV)
             if (PlayerCamera != null)
             {
-                float targetFov = Mathf.Lerp(HipFOV, AimFOV, Smooth01(_aimT));
+                float targetFov = Mathf.Lerp(HipFOV, _currentAimFOV, Smooth01(_aimT));
                 PlayerCamera.fieldOfView = Mathf.Lerp(PlayerCamera.fieldOfView, targetFov, Time.deltaTime * FovLerpSpeed);
             }
 
@@ -395,8 +444,15 @@ namespace Unity.FPS.Gameplay
 
         void UpdateLookSensitivity()
         {
-            if (!AutoScaleLookSensitivity || _lookComponent == null || float.IsNaN(_hipSensitivityValue)) return;
-            float scaled = Mathf.Lerp(_hipSensitivityValue, _hipSensitivityValue * AimSensitivityScale, Smooth01(_aimT));
+            if (!AutoScaleLookSensitivity || _lookComponent == null) return;
+
+            // Determine hip/ads target sensitivities
+            float hip = UseExplicitLookSensitivity ? HipLookSensitivity : _hipSensitivityValue;
+            if (float.IsNaN(hip)) return; // no valid base value
+
+            float ads = UseExplicitLookSensitivity ? AdsLookSensitivity : hip * AimSensitivityScale;
+
+            float scaled = Mathf.Lerp(hip, ads, Smooth01(_aimT));
             WriteSensitivity(scaled);
         }
 
@@ -436,9 +492,9 @@ namespace Unity.FPS.Gameplay
         // -------- clean-up --------
         void OnDestroy()
         {
-            // Restore sensitivity
+            // Restore sensitivity (to detected original if we had one)
             if (AutoScaleLookSensitivity && _lookComponent != null && !float.IsNaN(_hipSensitivityValue))
-                WriteSensitivity(_hipSensitivityValue);
+                WriteSensitivity(UseExplicitLookSensitivity ? HipLookSensitivity : _hipSensitivityValue);
 
             // Clean materials (instances) & restore originals
             if (_runtimeMats != null)

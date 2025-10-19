@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Unity.FPS.Gameplay;
+using Unity.FPS.Gameplay; // ADSController
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 using UnityEngine.InputSystem;
 #endif
@@ -68,7 +68,7 @@ public class MenuPauseRuntime : MonoBehaviour
         BindSensitivityTargets();
 
         // Initial state
-        SetGroup(_mainButtonsGroup, 1f, true);
+        ShowMainButtons(true);
         SetGroup(_blackBG, 0.6f, false);
         _rulesPanel.SetActive(false);
         _backStoryPanel.SetActive(false);
@@ -129,9 +129,11 @@ public class MenuPauseRuntime : MonoBehaviour
     void EnsureCameras()
     {
         if (!PlayerCamera)
-            foreach (var c in FindObjectsByType<Camera>(FindObjectsSortMode.None)) if (!c.enabled) { PlayerCamera = c; break; }
+            foreach (var c in FindObjectsByType<Camera>(FindObjectsSortMode.None))
+                if (!c.enabled) { PlayerCamera = c; break; }
         if (!MenuCamera)
-            foreach (var c in FindObjectsByType<Camera>(FindObjectsSortMode.None)) if (c.enabled) { MenuCamera = c; break; }
+            foreach (var c in FindObjectsByType<Camera>(FindObjectsSortMode.None))
+                if (c.enabled) { MenuCamera = c; break; }
 
         if (PlayerCamera) PlayerCamera.enabled = false;
         if (MenuCamera) MenuCamera.enabled = true;
@@ -170,7 +172,7 @@ public class MenuPauseRuntime : MonoBehaviour
     {
         _canvas = CreateCanvas("RuntimeCanvas", out var scaler);
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080); // back to normal size
+        scaler.referenceResolution = new Vector2(1920, 1080);
         DontDestroyOnLoad(_canvas.gameObject);
 
         // BG
@@ -183,30 +185,40 @@ public class MenuPauseRuntime : MonoBehaviour
         _btnRules = CreateButton(_mainButtonsGroup.transform, "Rules", new Vector2(0, 0), OnClick_Rules);
         _btnBackStory = CreateButton(_mainButtonsGroup.transform, "Back Story", new Vector2(0, -80), OnClick_BackStory);
 
-        // Rules panel — smaller + padded
+        // Rules panel — TALLER
         _rulesPanel = CreatePanelGO("RulesPanel", new Color(0, 0, 0, 0.35f),
-                                    new Vector2(1000, 680), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+                                    new Vector2(1100, 820),
+                                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
         _rulesPanel.transform.SetParent(_canvas.transform, false);
         _rulesPanel.SetActive(false);
 
-        float y = 230f;
-        CreateHeaderText(_rulesPanel.transform, "How the Game Works", new Vector2(0, y), 30);
+        float y = 320f;
+        CreateHeaderText(_rulesPanel.transform, "Rules", new Vector2(0, y), 30);
         y -= 60f;
         CreateBodyText(_rulesPanel.transform,
-            "Survive, complete objectives, and avoid getting overwhelmed.\n" +
-            "Enemies react to sound (bell), ranged mages fire orbs, allies can fight.",
-            new Vector2(0, y), 20, 900, 130);
+            "You play as Medic Sniper capable of reviving fallen allies when shooting them. Living allies can be ordered to Attack or Stand Down. " +
+            "Allies can die again, but can also be revived twice more. Zombies will patrol around unless they spot an Ally, in which case they will chase and attack. " +
+            "Be careful: some zombies are stronger than usual and should be dealt with carefully.\n\n" +
 
-        y -= 140f;
+            "Around the town there are bells, bombs, and barrels which can be used to even the odds. Bells can distract nearby zombies but have a cooldown when used. " +
+            "Bombs and exploding barrels deal significant damage to anything nearby, including Allies!\n\n" +
+
+            "You will have a time limit of 10 mins to complete each level. You will also gain score for killing zombies and lose score for every Ally's death you're " +
+            "responsible for. Your immediate win condition is to eliminate all zombies, but to achieve mastery you're aiming to complete levels with maximum score and time left over.",
+            new Vector2(0, y), 20, 980, 380);
+
+        y -= 400f;
         CreateHeaderText(_rulesPanel.transform, "Controls", new Vector2(0, y), 30);
         y -= 54f;
         CreateBodyText(_rulesPanel.transform,
-            "WASD = Move | Space = Jump | Shift = Sprint\n" +
-            "Mouse1 = Fire | Mouse2 = ADS | R = Reload\n" +
-            "E = Interact | Esc = Pause",
-            new Vector2(0, y), 20, 900, 90);
+            "WASD - Move\n" +
+            "Left Click - Shoot\n" +
+            "Right Click - Aiming (ADS)\n" +
+            "E - order living Allies to Attack or Stand Down\n" +
+            "ESC - Pause menu",
+            new Vector2(0, y), 20, 980, 140);
 
-        y -= 110f;
+        y -= 160f;
         _hipSlider = CreateSlider(_rulesPanel.transform, "Hip Sensitivity", HipMin, HipMax, new Vector2(0, y), OnHipSliderChanged, out _hipLabel);
         y -= 80f;
         _adsSlider = CreateSlider(_rulesPanel.transform, "ADS Scale", ADSMin, ADSMax, new Vector2(0, y), OnADSSliderChanged, out _adsLabel);
@@ -214,31 +226,35 @@ public class MenuPauseRuntime : MonoBehaviour
         y -= 90f;
         CreateButton(_rulesPanel.transform, "Close", new Vector2(0, y), CloseActiveSubpanel);
 
-        // Back Story panel — match sizing
+        // Back Story panel — TALLER
         _backStoryPanel = CreatePanelGO("BackStoryPanel", new Color(0, 0, 0, 0.35f),
-                                        new Vector2(1000, 680), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+                                        new Vector2(1100, 820),
+                                        new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
         _backStoryPanel.transform.SetParent(_canvas.transform, false);
         _backStoryPanel.SetActive(false);
 
-        float y2 = 230f;
-        CreateHeaderText(_backStoryPanel.transform, "Back Story", new Vector2(0, y2), 30);
+        float y2 = 320f;
+        CreateHeaderText(_backStoryPanel.transform, "Backstory", new Vector2(0, y2), 30);
         y2 -= 60f;
         CreateBodyText(_backStoryPanel.transform,
-            "A sudden outbreak turned the world into chaos. Bells lure the horde; barrels can burst with force. " +
-            "Your goal: regroup, survive, and uncover the truth behind the collapse.",
-            new Vector2(0, y2), 20, 900, 220);
+            "When negotiations fail, they send the troops. When the troops fail, they send you. You are a sniper medic, a marksman who's taken the Hippocratic Oath. " +
+            "You shoot to heal, not kill. Your allies have lost the battlefield, but they've not lost hope. Not as long as you still stand; The Last Medic.\n\n" +
 
-        y2 -= 240f;
+            "Zombies have overrun a nearby village and boots on the ground have failed to recover it. The presence of newer, stranger strains of zombies made standard rescue " +
+            "operations too risky. Your mission is to resurrect your fallen Allies in order to strategically ambush and eradicate any zombie presence in the area.",
+            new Vector2(0, y2), 20, 980, 520);
+
+        y2 -= 540f;
         CreateButton(_backStoryPanel.transform, "Close", new Vector2(0, y2), CloseActiveSubpanel);
 
-        // Pause menu — same size, centered
+        // Pause menu — a bit taller
         _pauseGroup = CreatePanel("PauseMenu", new Color(0, 0, 0, 0.35f), false,
-                                  new Vector2(520, 380), new Vector2(0.5f, 0.5f));
+                                  new Vector2(620, 460), new Vector2(0.5f, 0.5f));
         SetPauseVisible(false);
-        _btnPauseResume = CreateButton(_pauseGroup.transform, "Resume", new Vector2(0, 90), Resume);
-        _btnPauseRules = CreateButton(_pauseGroup.transform, "Rules", new Vector2(0, 30), () => OpenSubpanel(_rulesPanel, HostMenu.Pause));
-        _btnPauseSkip = CreateButton(_pauseGroup.transform, "Skip Level", new Vector2(0, -30), SkipLevel);
-        _btnPauseMain = CreateButton(_pauseGroup.transform, "Back to Menu", new Vector2(0, -90), BackToMainMenu);
+        _btnPauseResume = CreateButton(_pauseGroup.transform, "Resume", new Vector2(0, 120), Resume);
+        _btnPauseRules = CreateButton(_pauseGroup.transform, "Rules", new Vector2(0, 60), () => OpenSubpanel(_rulesPanel, HostMenu.Pause));
+        _btnPauseSkip = CreateButton(_pauseGroup.transform, "Skip Level", new Vector2(0, 0), SkipLevel);
+        _btnPauseMain = CreateButton(_pauseGroup.transform, "Back to Menu", new Vector2(0, -60), BackToMainMenu);
     }
 
     // ---------- Button logic ----------
@@ -247,6 +263,7 @@ public class MenuPauseRuntime : MonoBehaviour
     {
         if (_playing) return;
         StartCoroutine(PlaySequence());
+
     }
     void OnClick_Rules() => OpenSubpanel(_rulesPanel, HostMenu.Main);
     void OnClick_BackStory() => OpenSubpanel(_backStoryPanel, HostMenu.Main);
@@ -255,8 +272,12 @@ public class MenuPauseRuntime : MonoBehaviour
     {
         if (!panel) return;
         _subpanelHost = host; _subpanelOpen = true;
-        if (host == HostMenu.Main) SetGroup(_mainButtonsGroup, 0, false);
-        if (host == HostMenu.Pause) SetGroup(_pauseGroup, 0, false);
+
+        if (host == HostMenu.Main)
+            ShowMainButtons(false);
+        if (host == HostMenu.Pause)
+            SetGroup(_pauseGroup, 0, false);
+
         panel.SetActive(true);
     }
 
@@ -264,9 +285,9 @@ public class MenuPauseRuntime : MonoBehaviour
     {
         if (_rulesPanel) _rulesPanel.SetActive(false);
         if (_backStoryPanel) _backStoryPanel.SetActive(false);
-        _subpanelOpen = false;
-        if (_subpanelHost == HostMenu.Main) SetGroup(_mainButtonsGroup, 1, true);
+        if (_subpanelHost == HostMenu.Main) ShowMainButtons(true);
         if (_subpanelHost == HostMenu.Pause) SetGroup(_pauseGroup, 1, true);
+        _subpanelOpen = false;
         _subpanelHost = HostMenu.None;
     }
 
@@ -290,7 +311,7 @@ public class MenuPauseRuntime : MonoBehaviour
         SetPlayerChildrenEnabled(PlayerRoot, true);
         _rulesPanel.SetActive(false);
         _backStoryPanel.SetActive(false);
-        _mainButtonsGroup.gameObject.SetActive(false);
+        ShowMainButtons(false);
         _blackBG.gameObject.SetActive(false);
     }
 
@@ -301,8 +322,8 @@ public class MenuPauseRuntime : MonoBehaviour
         _paused = true;
         Time.timeScale = 0f;
         _blackBG.gameObject.SetActive(true);
-        SetGroup(_blackBG, 0.6f, true);
-        SetGroup(_mainButtonsGroup, 0f, false);
+        SetGroup(_blackBG, 0.6f, false); // ★ CHANGED: don't block raycasts so pause/main buttons remain clickable
+        ShowMainButtons(false);
         SetPauseVisible(true);
         SetPlayerChildrenEnabled(PlayerRoot, false);
         SetCursorForUI(true);
@@ -334,7 +355,6 @@ public class MenuPauseRuntime : MonoBehaviour
 
     void BackToMainMenu()
     {
-        // NEW: fully hide pause + subpanels before scene load
         if (_subpanelOpen) CloseActiveSubpanel();
         SetPauseVisible(false);
         SetGroup(_pauseGroup, 0f, false);
@@ -348,8 +368,7 @@ public class MenuPauseRuntime : MonoBehaviour
         _blackBG.gameObject.SetActive(true);
         SetGroup(_blackBG, 0.6f, false);
 
-        _mainButtonsGroup.gameObject.SetActive(true);
-        SetGroup(_mainButtonsGroup, 1f, true);
+        ShowMainButtons(true);
         SetCursorForUI(true);
 
         SetPlayerChildrenEnabled(PlayerRoot, false);
@@ -470,14 +489,14 @@ public class MenuPauseRuntime : MonoBehaviour
         var go = new GameObject("Header", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent, false);
         var rt = go.GetComponent<RectTransform>();
-        rt.sizeDelta = new Vector2(900, 50); rt.anchoredPosition = pos;
+        rt.sizeDelta = new Vector2(980, 50); rt.anchoredPosition = pos;
         var tx = go.GetComponent<Text>();
         tx.text = text; tx.alignment = TextAnchor.MiddleCenter;
         tx.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         tx.fontSize = size; tx.color = Color.white;
     }
 
-    void CreateBodyText(Transform parent, string text, Vector2 pos, int size = 20, float w = 900, float h = 120)
+    void CreateBodyText(Transform parent, string text, Vector2 pos, int size = 20, float w = 980, float h = 120)
     {
         var go = new GameObject("Body", typeof(RectTransform), typeof(Text));
         go.transform.SetParent(parent, false);
@@ -488,7 +507,7 @@ public class MenuPauseRuntime : MonoBehaviour
         tx.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         tx.fontSize = size; tx.color = Color.white;
         tx.horizontalOverflow = HorizontalWrapMode.Wrap;
-        tx.verticalOverflow = VerticalWrapMode.Truncate;
+        tx.verticalOverflow = VerticalWrapMode.Overflow;
     }
 
     Slider CreateSlider(Transform parent, string label, float min, float max, Vector2 pos,
@@ -498,17 +517,17 @@ public class MenuPauseRuntime : MonoBehaviour
         var labelGO = new GameObject(label + "Label", typeof(RectTransform), typeof(Text));
         labelGO.transform.SetParent(parent, false);
         var lrt = labelGO.GetComponent<RectTransform>();
-        lrt.sizeDelta = new Vector2(900, 24); lrt.anchoredPosition = pos + new Vector2(0, 28);
+        lrt.sizeDelta = new Vector2(980, 24); lrt.anchoredPosition = pos + new Vector2(0, 28);
         var lt = labelGO.GetComponent<Text>();
         lt.text = label; lt.alignment = TextAnchor.MiddleCenter;
         lt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         lt.fontSize = 18; lt.color = Color.white;
 
-        // Slider root (SMALLER)
+        // Slider root
         var sGO = new GameObject(label + "Slider", typeof(RectTransform), typeof(Slider));
         sGO.transform.SetParent(parent, false);
         var srt = sGO.GetComponent<RectTransform>();
-        srt.sizeDelta = new Vector2(600, 24); srt.anchoredPosition = pos;
+        srt.sizeDelta = new Vector2(720, 24); srt.anchoredPosition = pos;
         var slider = sGO.GetComponent<Slider>();
         slider.direction = Slider.Direction.LeftToRight;
         slider.minValue = min; slider.maxValue = max; slider.wholeNumbers = false;
@@ -544,7 +563,7 @@ public class MenuPauseRuntime : MonoBehaviour
         var val = new GameObject(label + "Value", typeof(RectTransform), typeof(Text));
         val.transform.SetParent(parent, false);
         var vrt = val.GetComponent<RectTransform>();
-        vrt.sizeDelta = new Vector2(900, 18); vrt.anchoredPosition = pos + new Vector2(0, -24);
+        vrt.sizeDelta = new Vector2(980, 18); vrt.anchoredPosition = pos + new Vector2(0, -24);
         var vt = val.GetComponent<Text>();
         vt.text = ""; vt.alignment = TextAnchor.MiddleCenter;
         vt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -569,6 +588,13 @@ public class MenuPauseRuntime : MonoBehaviour
         cg.alpha = alpha; cg.interactable = interactable; cg.blocksRaycasts = interactable;
     }
 
+    void ShowMainButtons(bool show)
+    {
+        if (!_mainButtonsGroup) return;
+        _mainButtonsGroup.gameObject.SetActive(show);
+        SetGroup(_mainButtonsGroup, show ? 1f : 0f, show);
+    }
+
     void SetCursorForUI(bool uiMode)
     {
         Cursor.lockState = uiMode ? CursorLockMode.None : CursorLockMode.Locked;
@@ -579,7 +605,12 @@ public class MenuPauseRuntime : MonoBehaviour
     {
         if (!cg) yield break;
         float t = 0f; cg.interactable = false; cg.blocksRaycasts = false;
-        while (t < time) { t += Time.unscaledDeltaTime; cg.alpha = Mathf.Lerp(from, to, t / time); yield return null; }
+        while (t < time)
+        {
+            t += Time.unscaledDeltaTime;
+            cg.alpha = Mathf.Lerp(from, to, t / time);
+            yield return null;
+        }
         cg.alpha = to;
     }
 
