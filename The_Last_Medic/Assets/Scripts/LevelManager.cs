@@ -50,6 +50,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         // make sure gameplay runs at start
+        playerTime = 600f;
         Time.timeScale = 1f;
         isPaused = false;
         AudioListener.pause = false;
@@ -64,6 +65,9 @@ public class LevelManager : MonoBehaviour
         {
             numAllies = alliesParent.transform.childCount;
         }
+
+        Debug.Log("# Allies: " + numAllies);
+        Debug.Log("# Zombies: " + numZombies);
 
         // cache player scripts
         CachePlayerScripts();
