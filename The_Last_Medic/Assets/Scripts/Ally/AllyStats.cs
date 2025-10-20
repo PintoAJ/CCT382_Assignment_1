@@ -73,6 +73,7 @@ public class AllyStats : CharacterStats
         maxHealth = 30;
         SetHealthTo(0);
         isDead = true;
+        lives = 3;
 
         damage = 10;
         attackSpeed = 1.5f;
