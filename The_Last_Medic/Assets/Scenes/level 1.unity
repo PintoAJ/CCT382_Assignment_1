@@ -544,11 +544,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f670f3f835211e499bc2699ca4db3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OnMouseOverCrosshair
-  targetLayers:
+  allyLayers:
     serializedVersion: 2
     m_Bits: 128
+  interLayers:
+    serializedVersion: 2
+    m_Bits: 1536
   crosshair: {fileID: 55835407}
-  colorCrosshair: {r: 0, g: 1, b: 0, a: 1}
+  colorAllyCrosshair: {r: 0, g: 1, b: 0, a: 1}
+  colorInterCrosshair: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &59526698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10696,11 +10700,11 @@ PrefabInstance:
     - target: {fileID: 492840205319804529, guid: b7d76512ead5144908ea70787db879d0, type: 3}
       propertyPath: 'TowerSpawns.Array.data[0]'
       value: 
-      objectReference: {fileID: 2031823939}
+      objectReference: {fileID: 855559706}
     - target: {fileID: 492840205319804529, guid: b7d76512ead5144908ea70787db879d0, type: 3}
       propertyPath: 'TowerSpawns.Array.data[1]'
       value: 
-      objectReference: {fileID: 855559706}
+      objectReference: {fileID: 2031823939}
     - target: {fileID: 671472322749987766, guid: b7d76512ead5144908ea70787db879d0, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 4294967295
@@ -13984,7 +13988,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1367255895
 MonoBehaviour:
   m_ObjectHideFlags: 0
