@@ -8,9 +8,7 @@ public class AllyStats : CharacterStats
     public float attackSpeed;
     public float viewRadius;
     public AllyState state = AllyState.DEAD;
-    public GameObject levelManager;
     public int lives = 3;
-    public LevelManager lm;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -30,6 +28,7 @@ public class AllyStats : CharacterStats
         if (lives == 0)
         {
             lm.AllyDown();
+            lm.AddScore(-300);
         }
     }
 
@@ -69,12 +68,6 @@ public class AllyStats : CharacterStats
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Start()
-    {
-        InitVariables();
-    }
-
     public override void InitVariables()
     {
         maxHealth = 30;
@@ -84,6 +77,5 @@ public class AllyStats : CharacterStats
         damage = 10;
         attackSpeed = 1.5f;
         viewRadius = 30;
-        lm = levelManager.GetComponent<LevelManager>();
     }
 }

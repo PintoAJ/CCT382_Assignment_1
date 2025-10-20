@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.AI; // NavMeshAgent
+using UnityEngine.AI;
+using System; // NavMeshAgent
 
 public class LevelManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class LevelManager : MonoBehaviour
     public TMP_Text alliesText;
     public TMP_Text zombiesText;
     public TMP_Text modeText;
+    public TMP_Text timerText;
     public TMP_Text scoreText;
 
     [Header("End Panel")]
@@ -51,6 +53,7 @@ public class LevelManager : MonoBehaviour
     {
         // make sure gameplay runs at start
         playerTime = 600f;
+        playerScore = 0;
         Time.timeScale = 1f;
         isPaused = false;
         AudioListener.pause = false;
@@ -182,7 +185,14 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        playerTime -= Time.deltaTime;
+        if (playerTime > 1)
+        {
+            playerTime -= Time.deltaTime;
+        }
+        else
+        {
+            playerTime = 0;
+        }
         UpdateUI();
 
         // toggle ally mode with E
@@ -221,6 +231,13 @@ public class LevelManager : MonoBehaviour
         {
             modeText.text = "Mode: " + (isCombatMode ? "Combat" : "Hidden");
         }
+
+        int mins = Mathf.FloorToInt(playerTime / 60);
+        int secs = Mathf.FloorToInt(playerTime % 60);
+
+        timerText.text = "Time: " + string.Format("{0:00}:{1:00}", mins, secs);
+
+        scoreText.text = "Score: " + playerScore; //+ string.Format("{0000}", playerScore);
     }
 
     public bool getOrder() {
@@ -256,6 +273,11 @@ public class LevelManager : MonoBehaviour
         }
 
         UpdateUI();
+    }
+
+    public void AddScore(int points)
+    {
+        playerScore += points;
     }
 
     IEnumerator EndGame(bool win)

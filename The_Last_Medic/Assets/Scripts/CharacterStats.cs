@@ -7,11 +7,14 @@ public class CharacterStats : MonoBehaviour
     [SerializeField] protected int maxHealth;
     public int MaxHealth => maxHealth;
     [SerializeField] protected bool isDead;
+    public GameObject LevelManager;
+    public LevelManager lm;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         InitVariables();
+        lm = LevelManager.GetComponent<LevelManager>();
     }
 
     public virtual void CheckHealth()
