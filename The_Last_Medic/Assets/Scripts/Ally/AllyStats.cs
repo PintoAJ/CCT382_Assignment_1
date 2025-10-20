@@ -10,6 +10,7 @@ public class AllyStats : CharacterStats
     public AllyState state = AllyState.DEAD;
     public GameObject levelManager;
     public int lives = 3;
+    public LevelManager lm;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -28,7 +29,6 @@ public class AllyStats : CharacterStats
 
         if (lives == 0)
         {
-            LevelManager lm = levelManager.GetComponent<LevelManager>();
             lm.AllyDown();
         }
     }
@@ -38,7 +38,14 @@ public class AllyStats : CharacterStats
         if (lives > 0)
         {
             lives--;
-            state = AllyState.HIDDEN;
+
+            if (lm.getOrder() == true)
+            {
+                state = AllyState.COMBAT;
+            }
+            else {
+                state = AllyState.HIDDEN;
+            }
             SetHealthTo(maxHealth);
             isDead = false;
         }
@@ -77,5 +84,6 @@ public class AllyStats : CharacterStats
         damage = 10;
         attackSpeed = 1.5f;
         viewRadius = 30;
+        lm = levelManager.GetComponent<LevelManager>();
     }
 }

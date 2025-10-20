@@ -223,6 +223,10 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public bool getOrder() {
+        return isCombatMode;
+    }
+
     void ToggleAllyMode()
     {
         isCombatMode = !isCombatMode;
