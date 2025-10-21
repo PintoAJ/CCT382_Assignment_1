@@ -103,9 +103,6 @@ public class LevelHUDFactory_NoText : MonoBehaviour
 
         // Assign non-text refs back to LevelManager (safe)
         levelManager.endPanel = endGroup;
-        levelManager.retryButton = retryButton;
-        levelManager.nextButton = nextButton;
-        levelManager.menuButton = menuButton;
 
         Debug.Log("[LevelHUDFactory_NoText] Built UI shell (no text). Drop TMP texts into the slots and drag them into LevelManager afterward.");
     }

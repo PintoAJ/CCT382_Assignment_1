@@ -26,22 +26,17 @@ public class LevelManager : MonoBehaviour
     public TMP_Text timerText;
     public TMP_Text scoreText;
 
-    [Header("End Panel")]
+    [Header("Pause Panel")]
     public CanvasGroup endPanel;
     public TMP_Text endTitle;
+    public TMP_Text endSubtitle;
     public Button retryButton;
-    public Button nextButton;
-    public Button menuButton;
-
-    [Header("Pause Panel")]
-    public CanvasGroup pausePanel;
-    public Button pauseResumeButton;
-    public Button pauseRetryButton;
-    public Button pauseSkipButton;
-    public Button pauseMenuButton;
+    public Button nextLevelButton;
+    public Button mainMenuButton;
 
     bool isCombatMode = false;
     bool gameEnded = false;
+    bool playerVictory = false;
 
     // pause state
     bool isPaused = false;
@@ -78,32 +73,11 @@ public class LevelManager : MonoBehaviour
         // cache agents & animators to pause/resume instantly
         CacheAgentsAndAnimators();
 
-        // hide end panel at start
-        if (endPanel)
-        {
-            endPanel.alpha = 0;
-            endPanel.interactable = false;
-            endPanel.blocksRaycasts = false;
-        }
-
-        // hide pause panel at start
-        if (pausePanel)
-        {
-            pausePanel.alpha = 0f;
-            pausePanel.interactable = false;
-            pausePanel.blocksRaycasts = false;
-        }
-
-        // hook up the END panel button listeners (game over)
-        if (retryButton) retryButton.onClick.AddListener(RestartLevel);
-        if (nextButton) nextButton.onClick.AddListener(GoToNextScene);
-        if (menuButton) menuButton.onClick.AddListener(() => SceneManager.LoadScene(0));
-
-        // hook up the PAUSE panel button listeners
-        if (pauseResumeButton) pauseResumeButton.onClick.AddListener(() => SetPaused(false));
-        if (pauseRetryButton) pauseRetryButton.onClick.AddListener(RestartLevel);
-        if (pauseSkipButton) pauseSkipButton.onClick.AddListener(GoToNextScene);
-        if (pauseMenuButton) pauseMenuButton.onClick.AddListener(() => SceneManager.LoadScene(0));
+        // hide end/pause panel at start
+        endPanel.gameObject.SetActive(false);
+        retryButton.gameObject.SetActive(false);
+        nextLevelButton.gameObject.SetActive(false);
+        mainMenuButton.gameObject.SetActive(false);
 
         UpdateUI();
     }
@@ -138,8 +112,19 @@ public class LevelManager : MonoBehaviour
         CollectFrom(playerRoot); // in case the player uses NavMesh/Animator too
     }
 
+    public void MainMenu()
+    {
+        Debug.Log("Main Menu Called");
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene(0);
+    }
+
     public void RestartLevel()
     {
+        Debug.Log("Restart Level Called");
         Time.timeScale = 1f;
         AudioListener.pause = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -147,6 +132,7 @@ public class LevelManager : MonoBehaviour
 
     public void GoToNextScene()
     {
+        Debug.Log("Next Scene Called");
         Time.timeScale = 1f;
         AudioListener.pause = false;
         int cur = SceneManager.GetActiveScene().buildIndex;
@@ -182,6 +168,7 @@ public class LevelManager : MonoBehaviour
         if (isPaused)
         {
             // no gameplay updates while paused
+            PauseGame();
             return;
         }
 
@@ -205,13 +192,16 @@ public class LevelManager : MonoBehaviour
         // lose if all allies dead or time ran out
         if (numAllies <= 0 || playerTime <= 0)
         {
-            StartCoroutine(EndGame(false));
+            gameEnded = true;
+            PauseGame();
         }
 
         // win if all zombies are gone
         if (numZombies <= 0)
         {
-            StartCoroutine(EndGame(true));
+            gameEnded = true;
+            playerVictory = true;
+            PauseGame();
         }
     }
 
@@ -280,26 +270,22 @@ public class LevelManager : MonoBehaviour
         playerScore += points;
     }
 
-    IEnumerator EndGame(bool win)
+    public void PauseGame()
     {
-        gameEnded = true;
-        playerScore = Mathf.RoundToInt(playerTime * 10f);
+        SetPaused(true);
 
-        if (endTitle) endTitle.text = win ? "VICTORY" : "DEFEAT";
-        if (scoreText) scoreText.text = "Score: " + playerScore;
+        endTitle.text = !gameEnded    ? "Game Paused":
+                        playerVictory ? "VICTORY" : 
+                                        "DEFEAT";
+        endSubtitle.text = !gameEnded     ? "" :
+                           playerVictory  ? "You Killed All The Zombies!" :
+                           numAllies <= 0 ? "All Allies were Killed!" :
+                                            "You Ran Out of Time!";
 
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.unscaledDeltaTime;
-            if (endPanel)
-            {
-                endPanel.alpha = Mathf.Lerp(0f, 0.95f, t);
-                endPanel.interactable = true;
-                endPanel.blocksRaycasts = true;
-            }
-            yield return null;
-        }
+        endPanel.gameObject.SetActive(true);
+        retryButton.gameObject.SetActive(true);
+        nextLevelButton.gameObject.SetActive(true);
+        mainMenuButton.gameObject.SetActive(true);
 
         // stop the world like in Dark Souls
         Time.timeScale = 0f;
@@ -310,17 +296,12 @@ public class LevelManager : MonoBehaviour
 
     void SetPaused(bool pause)
     {
-        if (gameEnded) return; // end screen owns the timescale
-
         isPaused = pause;
 
-        // UI
-        if (pausePanel)
-        {
-            pausePanel.alpha = pause ? 1f : 0f;
-            pausePanel.interactable = pause;
-            pausePanel.blocksRaycasts = pause;
-        }
+        Cursor.lockState = pause ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = pause ? false : true;
+        //Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true;
 
         // Time & audio
         Time.timeScale = pause ? 0f : 1f;
