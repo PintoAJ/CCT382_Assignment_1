@@ -8,6 +8,7 @@ public class AllyStats : CharacterStats
     public float attackSpeed;
     public float viewRadius;
     public AllyState state = AllyState.DEAD;
+    public int lives = 3;
 
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -24,17 +25,29 @@ public class AllyStats : CharacterStats
         base.Die();
         state = AllyState.DEAD;
 
-        // consider rotating model to lie flat on ground 
-        // alternatively, find death animation
+        if (lives == 0)
+        {
+            lm.AllyDown();
+            lm.AddScore(-300);
+        }
     }
 
     public void Revive()
     {
-        state = AllyState.HIDDEN;
-        SetHealthTo(maxHealth);
-        isDead = false;
+        if (lives > 0)
+        {
+            lives--;
 
-        // undo dying animation/changes
+            if (lm.getOrder() == true)
+            {
+                state = AllyState.COMBAT;
+            }
+            else {
+                state = AllyState.HIDDEN;
+            }
+            SetHealthTo(maxHealth);
+            isDead = false;
+        }
     }
 
     public void ReceiveOrder(string mode)
@@ -55,20 +68,15 @@ public class AllyStats : CharacterStats
         }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Start()
-    {
-        InitVariables();
-    }
-
     public override void InitVariables()
     {
         maxHealth = 30;
         SetHealthTo(0);
         isDead = true;
+        lives = 3;
 
         damage = 10;
         attackSpeed = 1.5f;
-        viewRadius = 50;
+        viewRadius = 30;
     }
 }

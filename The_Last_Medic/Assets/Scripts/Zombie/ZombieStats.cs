@@ -16,12 +16,8 @@ public class ZombieStats : CharacterStats
     public override void Die()
     {
         base.Die();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        InitVariables();
+        lm.ZombieDown();
+        lm.AddScore(100);
     }
 
     public override void InitVariables()

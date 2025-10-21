@@ -40,8 +40,9 @@ public class AllyController : MonoBehaviour
                 //GameObject enemy = c.gameObject;
                 RaycastHit hit;
                 Vector3 direction = (c.transform.position - transform.position).normalized;
+                ZombieStats zs = c.gameObject.GetComponent<ZombieStats>();
 
-                if (Physics.Raycast(transform.position, direction, out hit, stats.viewRadius))
+                if (!zs.IsDead() && Physics.Raycast(transform.position, direction, out hit, stats.viewRadius))
                 {
 
                     // check if Ally has direct line of sight on closest Enemy

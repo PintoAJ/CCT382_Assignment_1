@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Unity.FPS.Gameplay
 {
@@ -17,21 +17,35 @@ namespace Unity.FPS.Gameplay
         Vector3 initialLocalPos;
         Quaternion initialLocalRot;
         Vector3 lastCameraEuler;
+        int playerCamLayer = -1; // ✅ new
 
         void Start()
         {
             if (cameraTransform == null)
             {
-                cameraTransform = Camera.main.transform;
+                cameraTransform = Camera.main ? Camera.main.transform : null;
             }
 
             initialLocalPos = transform.localPosition;
             initialLocalRot = transform.localRotation;
-            lastCameraEuler = cameraTransform.eulerAngles;
+
+            if (cameraTransform != null)
+                lastCameraEuler = cameraTransform.eulerAngles;
+
+            // ✅ cache PlayerCam layer index (if it exists)
+            playerCamLayer = LayerMask.NameToLayer("PlayerCam");
         }
 
         void Update()
         {
+            // ✅ skip if camera not assigned
+            if (cameraTransform == null)
+                return;
+
+            // ✅ skip if not the PlayerCam layer
+            if (playerCamLayer >= 0 && cameraTransform.gameObject.layer != playerCamLayer)
+                return;
+
             ApplySway();
         }
 

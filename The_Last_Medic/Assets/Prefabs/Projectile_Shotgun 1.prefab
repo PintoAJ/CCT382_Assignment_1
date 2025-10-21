@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3659995153115176982}
-  - component: {fileID: 462137032953931964}
   - component: {fileID: 4423604293617413689}
+  - component: {fileID: 462137032953931964}
   - component: {fileID: 4318116202293938247}
   m_Layer: 0
   m_Name: Projectile_Shotgun 1
@@ -35,20 +35,6 @@ Transform:
   - {fileID: 8402172112652589804}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &462137032953931964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3659995153115176983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30199dabca082534cbf510015555b28a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unity.FPS.Gameplay.ProjectileBase
-  MaxLifeTime: 5
-  DestroyOnHit: 1
 --- !u!114 &4423604293617413689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +54,7 @@ MonoBehaviour:
   Radius: 0.02
   HitLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
   IgnoreTriggers: 1
   OnFirstHit:
     m_PersistentCalls:
@@ -78,6 +64,20 @@ MonoBehaviour:
   DecalSize: 0.08
   DecalLifetime: 3
   DecalColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &462137032953931964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3659995153115176983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30199dabca082534cbf510015555b28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unity.FPS.Gameplay.ProjectileBase
+  MaxLifeTime: 5
+  DestroyOnHit: 1
 --- !u!114 &4318116202293938247
 MonoBehaviour:
   m_ObjectHideFlags: 0

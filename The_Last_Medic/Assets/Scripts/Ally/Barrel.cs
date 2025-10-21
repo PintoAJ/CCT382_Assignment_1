@@ -40,6 +40,7 @@ public class Barrel : MonoBehaviour, IBulletHittable
 
             var stats = c.GetComponent<CharacterStats>() ?? c.GetComponentInParent<CharacterStats>();
             if (stats != null) stats.TakeDamage(Damage);
+            Destroy(gameObject);
         }
 
         // optional physics kick (skip self)

@@ -48,7 +48,8 @@ public class ZombieController : MonoBehaviour
             else
             {
                 // maybe just turn off instead?
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+
             }
         }
         else if (!isDistracted)

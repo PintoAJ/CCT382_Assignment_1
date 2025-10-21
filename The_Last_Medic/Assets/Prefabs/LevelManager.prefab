@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5099274811594885293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4243233953165060186}
+  - component: {fileID: 1872472413370812559}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4243233953165060186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099274811594885293}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.98028, y: 38.50607, z: -52.3859}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1872472413370812559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099274811594885293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99f8d2448cd39408698514bfdc386440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  numZombies: 0
+  numAllies: 0
+  playerScore: 0
+  playerTime: 0
+  zombiesParent: {fileID: 0}
+  alliesParent: {fileID: 0}
+  playerRoot: {fileID: 0}
+  alliesText: {fileID: 0}
+  zombiesText: {fileID: 0}
+  modeText: {fileID: 0}
+  timerText: {fileID: 0}
+  scoreText: {fileID: 0}
+  endPanel: {fileID: 0}
+  endTitle: {fileID: 0}
+  retryButton: {fileID: 0}
+  nextButton: {fileID: 0}
+  menuButton: {fileID: 0}
+  pausePanel: {fileID: 0}
+  pauseResumeButton: {fileID: 0}
+  pauseRetryButton: {fileID: 0}
+  pauseSkipButton: {fileID: 0}
+  pauseMenuButton: {fileID: 0}

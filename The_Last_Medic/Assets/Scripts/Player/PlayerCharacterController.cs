@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Unity.FPS.Gameplay
 {
@@ -18,6 +19,10 @@ namespace Unity.FPS.Gameplay
         public float SprintSpeed = 8f;
         public float JumpForce = 5f;
         public float Gravity = -9.81f;
+        public Transform[] TowerSpawns;
+        public bool FirstTeleport = true;
+        public float TeleportCooldown;
+        public float Wait;
 
         [Header("Mouse Look")]
         public float LookSensitivity = 1f;
@@ -47,12 +52,60 @@ namespace Unity.FPS.Gameplay
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            Wait = TeleportCooldown;
         }
 
         void Update()
         {
             HandleLook();
             HandleMovement();
+
+            if (FirstTeleport || Wait <= 0)
+            {
+                CharacterController cc = GetComponent<CharacterController>();
+
+                if (Keyboard.current.digit1Key.wasPressedThisFrame)
+                {
+                    FirstTeleport = false;
+                    cc.enabled = false;
+                    transform.position = TowerSpawns[0].position;
+                    transform.rotation = TowerSpawns[0].rotation;
+                    cc.enabled = true;
+                    Wait = TeleportCooldown;
+                }
+                else if (Keyboard.current.digit2Key.wasPressedThisFrame)
+                {
+                    FirstTeleport = false;
+                    cc.enabled = false;
+                    transform.position = TowerSpawns[1].position;
+                    transform.rotation = TowerSpawns[1].rotation;
+                    cc.enabled = true;
+                    Wait = TeleportCooldown;
+                }
+                else if (TowerSpawns.Length > 2 && Keyboard.current.digit3Key.wasPressedThisFrame)
+                {
+                    FirstTeleport = false;
+                    cc.enabled = false;
+                    transform.position = TowerSpawns[2].position;
+                    transform.rotation = TowerSpawns[2].rotation;
+                    cc.enabled = true;
+                    Wait = TeleportCooldown;
+                }
+                else if (TowerSpawns.Length > 2 && Keyboard.current.digit4Key.wasPressedThisFrame)
+                {
+                    FirstTeleport = false;
+                    cc.enabled = false;
+                    transform.position = TowerSpawns[3].position;
+                    transform.rotation = TowerSpawns[3].rotation;
+                    cc.enabled = true;
+                    Wait = TeleportCooldown;
+                }
+            }
+            else
+            {
+                Wait -= Time.deltaTime;
+            }
+            
         }
 
         void HandleLook()

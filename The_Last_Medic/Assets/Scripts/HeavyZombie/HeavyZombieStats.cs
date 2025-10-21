@@ -12,4 +12,10 @@ public class HeavyZombieStats : ZombieStats
         attackSpeed = 2f;
         viewRadius = 25;
     }
+
+    public override void Die()
+    {
+        base.Die();
+        lm.AddScore(400);
+    }
 }
