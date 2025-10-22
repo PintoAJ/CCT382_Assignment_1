@@ -28,7 +28,7 @@ public class AllyStats : CharacterStats
   // Play ally death sound EVERY time they die
     if (lm != null && lm.allyDeathSound != null)
         lm.allyDeathSound.Play();
-        
+
         if (lives == 0)
         {
             lm.AllyDown();
@@ -36,23 +36,27 @@ public class AllyStats : CharacterStats
         }
     }
 
-    public void Revive()
+   public void Revive()
+{
+    if (lives > 0)
     {
-        if (lives > 0)
-        {
-            lives--;
+        lives--;
 
-            if (lm.getOrder() == true)
-            {
-                state = AllyState.COMBAT;
-            }
-            else {
-                state = AllyState.HIDDEN;
-            }
-            SetHealthTo(maxHealth);
-            isDead = false;
+        if (lm.getOrder() == true)
+        {
+            state = AllyState.COMBAT;
         }
+        else {
+            state = AllyState.HIDDEN;
+        }
+        SetHealthTo(maxHealth);
+        isDead = false;
+
+        //  Play revive sound
+        if (lm != null && lm.reviveSound != null)
+            lm.reviveSound.Play();
     }
+}
 
     public void ReceiveOrder(string mode)
     {

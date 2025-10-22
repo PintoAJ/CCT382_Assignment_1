@@ -18,6 +18,8 @@ public class Barrel : MonoBehaviour, IBulletHittable
     public float ExplosionRadius = 4.0f;
     public float UpwardsModifier = 0.25f;
     public LayerMask PhysicsLayers = ~0;
+    private AudioSource explosionSound;
+
 
     [Header("Usage")]
     public bool OneShot = true;
@@ -27,7 +29,18 @@ public class Barrel : MonoBehaviour, IBulletHittable
     {
         if (OneShot && _used) return;
         _used = true;
+        
+if (explosionSound != null)
+    explosionSound.Play();
 
+
+        void Start()
+{
+    explosionSound = GetComponent<AudioSource>();
+}
+
+
+        GetComponent<AudioSource>()?.Play();
         // visible pulse at barrel center
         ExpandingSphereFX.SpawnAtObject(transform, PulseColor, PulseEndRadius, PulseDuration);
 

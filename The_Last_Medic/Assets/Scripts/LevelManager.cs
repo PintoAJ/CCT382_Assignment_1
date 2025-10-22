@@ -16,6 +16,8 @@ public class LevelManager : MonoBehaviour
     public AudioSource attackSound;
     public AudioSource defendSound;
     public AudioSource allyDeathSound;
+    public AudioSource reviveSound;
+
 
 
 
