@@ -6,7 +6,7 @@ public class MageZombieController : ZombieController
 
     protected override void AttackTarget(Transform target)
     {
-        // spawn 3 units above the mage’s position
+        // spawn 3 units above the mageï¿½s position
         Vector3 spawnPos = transform.position + Vector3.up * 2f;
 
         // aim at the elevated point on the target (3 units up)
@@ -16,5 +16,8 @@ public class MageZombieController : ZombieController
         GameObject newMageOrb = Instantiate(mageOrb, spawnPos, rot);
         var orb = newMageOrb.GetComponent<MageOrb>();
         orb.Init(target);
+
+          // Play sound
+        GetComponent<AudioSource>().Play();
     }
 }

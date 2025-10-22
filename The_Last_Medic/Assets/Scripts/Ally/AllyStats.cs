@@ -25,6 +25,10 @@ public class AllyStats : CharacterStats
         base.Die();
         state = AllyState.DEAD;
 
+  // Play ally death sound EVERY time they die
+    if (lm != null && lm.allyDeathSound != null)
+        lm.allyDeathSound.Play();
+        
         if (lives == 0)
         {
             lm.AllyDown();

@@ -13,6 +13,12 @@ public class LevelManager : MonoBehaviour
     public int numAllies;
     public int playerScore;
     public float playerTime;
+    public AudioSource attackSound;
+    public AudioSource defendSound;
+    public AudioSource allyDeathSound;
+
+
+
 
     public GameObject zombiesParent;
     public GameObject alliesParent;
@@ -147,10 +153,15 @@ public class LevelManager : MonoBehaviour
     }
 
     public void AllyDown()
-    {
-        numAllies--;
-        UpdateUI();
-    }
+{
+    numAllies--;
+
+    // Play Ally Death sound
+    if (allyDeathSound != null)
+        allyDeathSound.Play();
+
+    UpdateUI();
+}
 
     void Update()
     {
@@ -184,10 +195,12 @@ public class LevelManager : MonoBehaviour
 
         // toggle ally mode with E
         // we use both input systems so this should work
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ToggleAllyMode();
-        }
+      if (Input.GetKeyDown(KeyCode.E))
+{
+    ToggleAllyMode();
+}
+
+
 
         // lose if all allies dead or time ran out
         if (numAllies <= 0 || playerTime <= 0)
@@ -259,9 +272,21 @@ public class LevelManager : MonoBehaviour
                 // optional visual cue
                 var rend = ally.GetComponentInChildren<Renderer>();
                 if (rend) rend.material.color = isCombatMode ? Color.red : Color.blue;
+
+                
             }
         }
 
+
+   //  Play Sound
+    if (isCombatMode)
+    {
+        if (attackSound != null) attackSound.Play();
+    }
+    else
+    {
+        if (defendSound != null) defendSound.Play();
+    }
         UpdateUI();
     }
 
