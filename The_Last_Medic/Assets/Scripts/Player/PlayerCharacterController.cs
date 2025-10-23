@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 namespace Unity.FPS.Gameplay
 {
@@ -23,6 +24,10 @@ namespace Unity.FPS.Gameplay
         public bool FirstTeleport = true;
         public float TeleportCooldown;
         public float Wait;
+        public TextMeshProUGUI CooldownText;
+        
+
+        
 
         [Header("Mouse Look")]
         public float LookSensitivity = 1f;
@@ -62,6 +67,7 @@ namespace Unity.FPS.Gameplay
 
             if (FirstTeleport || Wait <= 0)
             {
+                if (CooldownText) CooldownText.text = "Teleport Ready!"; 
                 CharacterController cc = GetComponent<CharacterController>();
 
                 if (Keyboard.current.digit1Key.wasPressedThisFrame)
@@ -104,6 +110,7 @@ namespace Unity.FPS.Gameplay
             else
             {
                 Wait -= Time.deltaTime;
+                  if (CooldownText) CooldownText.text = "Cooldown: " + Wait.ToString("F1") + "s"; 
             }
             
         }
