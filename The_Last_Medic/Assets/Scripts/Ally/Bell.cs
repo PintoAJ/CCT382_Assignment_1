@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bell : MonoBehaviour, IBulletHittable
 {
@@ -14,6 +14,8 @@ public class Bell : MonoBehaviour, IBulletHittable
     public Color PulseColor = new Color(0.25f, 0.8f, 1f, 0.9f);
     public float PulseEndRadius = 6f;
     public float PulseDuration = 0.35f;
+    public bool IsOnCooldown => !_firstUse && Time.time < _lastUse + cooldown;
+
 
     public void OnBulletHit(Vector3 hitPoint, Vector3 hitNormal, GameObject projectile)
     {
@@ -21,17 +23,35 @@ public class Bell : MonoBehaviour, IBulletHittable
         _firstUse = false;
         _lastUse = Time.time;
 
-        // spawn centered on the bell, sized to bell bounds, nudged toward camera
         ExpandingSphereFX.SpawnAtObject(transform, PulseColor, PulseEndRadius, PulseDuration);
 
-        // distract nearby enemies
-        var colliders = Physics.OverlapSphere(transform.position, radius, enemyMask);
+        // DEBUG START
+        int maskVal = enemyMask.value;
+        Debug.Log($"[Bell] OverlapSphere start at {transform.position}, r={radius}, mask={maskVal}");
+        // Use Collide to include triggers regardless of project setting
+        var colliders = Physics.OverlapSphere(transform.position, radius, enemyMask, QueryTriggerInteraction.Collide);
+        Debug.Log($"[Bell] Found {colliders.Length} colliders");
+        // DEBUG END
+
         foreach (var c in colliders)
         {
-            var zc = c.GetComponent<ZombieController>() ?? c.GetComponentInParent<ZombieController>();
-            if (zc != null) zc.Distracted(transform);
+            var zc = c.GetComponent<ZombieController>()
+                   ?? c.GetComponentInParent<ZombieController>()
+                   ?? c.GetComponentInChildren<ZombieController>(); // tolerant for L2 hierarchy
+
+            if (zc != null)
+            {
+                Debug.Log($"[Bell] Distracting {zc.name} via {c.name}");
+                zc.Distracted(transform);
+            }
+            else
+            {
+                // Helpful once: tells you which collider didn’t resolve to a zombie controller
+                // Debug.Log($"[Bell] No ZombieController on/near {c.name}");
+            }
         }
     }
+
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
