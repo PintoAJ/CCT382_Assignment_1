@@ -176,11 +176,6 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SetPaused(!isPaused);
-        }
-
-        if (isPaused)
-        {
-            // no gameplay updates while paused
             PauseGame();
             return;
         }
@@ -197,10 +192,10 @@ public class LevelManager : MonoBehaviour
 
         // toggle ally mode with E
         // we use both input systems so this should work
-      if (Input.GetKeyDown(KeyCode.E))
-{
-    ToggleAllyMode();
-}
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleAllyMode();
+        }
 
 
 
@@ -208,6 +203,7 @@ public class LevelManager : MonoBehaviour
         if (numAllies <= 0 || playerTime <= 0)
         {
             gameEnded = true;
+            SetPaused(true);
             PauseGame();
         }
 
@@ -216,6 +212,7 @@ public class LevelManager : MonoBehaviour
         {
             gameEnded = true;
             playerVictory = true;
+            SetPaused(true);
             PauseGame();
         }
     }
@@ -280,7 +277,7 @@ public class LevelManager : MonoBehaviour
         }
 
 
-   //  Play Sound
+    //  Play Sound
     if (isCombatMode)
     {
         if (attackSound != null) attackSound.Play();
@@ -299,7 +296,7 @@ public class LevelManager : MonoBehaviour
 
     public void PauseGame()
     {
-        SetPaused(true);
+        //SetPaused(true);
 
         endTitle.text = !gameEnded    ? "Game Paused":
                         playerVictory ? "VICTORY" : 
@@ -309,14 +306,14 @@ public class LevelManager : MonoBehaviour
                            numAllies <= 0 ? "All Allies were Killed!" :
                                             "You Ran Out of Time!";
 
-        endPanel.gameObject.SetActive(true);
-        retryButton.gameObject.SetActive(true);
-        nextLevelButton.gameObject.SetActive(true);
-        mainMenuButton.gameObject.SetActive(true);
+        endPanel.gameObject.SetActive(isPaused);
+        retryButton.gameObject.SetActive(isPaused);
+        nextLevelButton.gameObject.SetActive(isPaused);
+        mainMenuButton.gameObject.SetActive(isPaused);
 
         // stop the world like in Dark Souls
-        Time.timeScale = 0f;
-        AudioListener.pause = true;
+        Time.timeScale = isPaused ? 0f : 1f;
+        AudioListener.pause = isPaused;
     }
 
     // Pause System
