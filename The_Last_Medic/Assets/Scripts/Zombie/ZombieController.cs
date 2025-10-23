@@ -13,6 +13,8 @@ public class ZombieController : MonoBehaviour
     public float curAttentionSpan;
     public float maxAttentionSpan = 10;
     public float timeToDie = 10f;
+    public AudioSource attackSound;
+
 
     private NavMeshAgent agent = null;
     private Animator anim = null; 
@@ -218,6 +220,9 @@ public class ZombieController : MonoBehaviour
     {
         CharacterStats targetStats = target.GetComponent<CharacterStats>();
         stats.DealDamage(targetStats);
+
+        
+        GetComponent<AudioSource>().Play();
     }
 
     private void GetReferences()
